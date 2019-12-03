@@ -28,7 +28,6 @@
 #include "logMsg/traceLevels.h"                                  // Lmt*
 
 #include "orionld/context/OrionldContext.h"                      // OrionldContext
-#include "orionld/context/orionldContextCachePresent.h"          // orionldContextCachePresent
 #include "orionld/context/orionldContextCache.h"                 // Context Cache Internals
 #include "orionld/context/orionldContextCacheLookup.h"           // Own interface
 
@@ -40,7 +39,6 @@
 //
 OrionldContext* orionldContextCacheLookup(const char* url)
 {
-  orionldContextCachePresent("CTX", "orionldContextCacheLookup");
   for (int ix = 0; ix < orionldContextCacheSlotIx; ix++)
   {
     if (strcmp(url, orionldContextCache[ix]->url) == 0)

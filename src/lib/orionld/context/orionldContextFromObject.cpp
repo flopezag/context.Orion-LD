@@ -40,7 +40,6 @@ extern "C"
 #include "orionld/context/orionldContextUrlGenerate.h"           // orionldContextUrlGenerate
 #include "orionld/context/orionldContextCacheInsert.h"           // orionldContextCacheInsert
 #include "orionld/context/orionldContextCache.h"                 // ORIONLD_CONTEXT_CACHE_HASH_ARRAY_SIZE
-#include "orionld/context/orionldContextCachePresent.h"          // orionldContextCachePresent
 #include "orionld/context/orionldContextHashTablesFill.h"        // orionldContextHashTablesFill
 #include "orionld/context/orionldContextFromObject.h"            // Own interface
 
@@ -119,8 +118,6 @@ OrionldContext* orionldContextFromObject(char* url, bool toBeCloned, KjNode* con
     // orionldContextHashTablesFill fills in pdP
     return NULL;
   }
-
-  orionldContextCachePresent("CTX", "After orionldContextFromObject");
 
   return contextP;
 }
