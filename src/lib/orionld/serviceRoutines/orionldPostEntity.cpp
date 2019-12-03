@@ -60,98 +60,6 @@ extern "C"
 
 
 
-// -----------------------------------------------------------------------------
-//
-// treePresent -
-//
-void treePresent(const char* prefix, const char* title, KjNode* treeP)
-{
-  LM_TMP(("%s: %s", prefix, title));
-  LM_TMP(("%s: ------------------------------", prefix));
-
-  for (KjNode* itemP = treeP->value.firstChildP; itemP != NULL; itemP = itemP->next)
-  {
-    if (itemP->type == KjString)
-      LM_TMP(("%s: %s: \"%s\"", prefix, itemP->name, itemP->value.s));
-    else if (itemP->type == KjInt)
-      LM_TMP(("%s: %s: %ll", prefix, itemP->name, itemP->value.i));
-    else if (itemP->type == KjFloat)
-      LM_TMP(("%s: %s: %f", prefix, itemP->name, itemP->value.f));
-    else if (itemP->type == KjObject)
-    {
-      LM_TMP(("%s: %s: %s", prefix, itemP->name, kjValueType(itemP->type)));
-      for (KjNode* oItemP = itemP->value.firstChildP; oItemP != NULL; oItemP = oItemP->next)
-      {
-        if (oItemP->type == KjString)
-          LM_TMP(("%s:   %s: \"%s\"", prefix, oItemP->name, oItemP->value.s));
-        else if (oItemP->type == KjInt)
-          LM_TMP(("%s:   %s: (int) %d", prefix, oItemP->name, oItemP->value.i));
-        else if (oItemP->type == KjFloat)
-          LM_TMP(("%s:   %s: (string) %f", prefix, oItemP->name, oItemP->value.f));
-        else
-          LM_TMP(("%s:   %s: %s", prefix, oItemP->name, kjValueType(oItemP->type)));
-      }
-      LM_TMP(("%s:   ---------------------------", prefix));
-    }
-    else
-      LM_TMP(("%s: %s: %s", prefix, itemP->name, kjValueType(itemP->type)));
-  }
-}
-
-
-
-// -----------------------------------------------------------------------------
-//
-// entityTreePresent -
-//
-void entityTreePresent(const char* prefix, const char* title, KjNode* treeP)
-{
-  LM_TMP(("%s: %s", prefix, title));
-  LM_TMP(("%s: ------------------------------", prefix));
-
-  KjNode* idNodeP    = kjLookup(treeP, "_id");
-  KjNode* attrsNodeP = kjLookup(treeP, "attrs");
-
-  if (idNodeP != NULL)
-  {
-    for (KjNode* idItemP = idNodeP->value.firstChildP; idItemP != NULL; idItemP = idItemP->next)
-    {
-      if (idItemP->type == KjString)
-        LM_TMP(("%s: _id.%s: %s", prefix, idItemP->name, idItemP->value.s));
-      else
-        LM_TMP(("%s: _id.%s: %s", prefix, idItemP->name, kjValueType(idItemP->type)));
-    }
-  }
-
-  if (attrsNodeP != NULL)
-  {
-    for (KjNode* attrP = attrsNodeP->value.firstChildP; attrP != NULL; attrP = attrP->next)
-    {
-      KjNode* attrValueP = kjLookup(attrP, "value");
-      KjNode* attrTypeP  = kjLookup(attrP, "type");
-
-      if (attrValueP == NULL)
-        attrValueP = kjLookup(attrP, "object");
-
-      LM_TMP(("%s:   type:  %s", prefix, attrTypeP->value.s));
-
-      if (attrValueP->type == KjString)
-        LM_TMP(("%s:   %s: \"%s\"", prefix, attrP->name, attrValueP->value.s));
-      else if (attrValueP->type == KjInt)
-        LM_TMP(("%s:   %s: %d", prefix, attrP->name, attrValueP->value.i));
-      else if (attrValueP->type == KjFloat)
-        LM_TMP(("%s:   %s: %f", prefix, attrP->name, attrValueP->value.f));
-      else
-        LM_TMP(("%s:   %s: %s", prefix, attrP->name, kjValueType(attrValueP->type)));
-      LM_TMP(("%s:   ---------------------------", prefix));
-    }
-  }
-
-  LM_TMP(("%s: ------------------------------", prefix));
-}
-
-
-
 // ----------------------------------------------------------------------------
 //
 // orionldPartialUpdateResponseCreate -
@@ -681,7 +589,6 @@ static bool expandAttrNames(KjNode* treeP, char** detailsP)
   }
 
   orionldState.notify = true;
-//  entityTreePresent("MERGE", "to be notified", orionldState.contextP->tree);
   return true;
 }
 
@@ -713,8 +620,6 @@ static bool subscriptionMatchCallback
   KjNode*  expirationP       = NULL;
   KjNode*  throttlingP       = NULL;
   int      now               = 0;
-
-  treePresent("SUB", "Got a matching subscription", incomingRequestTree);
 
   for (KjNode* nodeP = subscriptionTree->value.firstChildP; nodeP != NULL; nodeP = nodeP->next)
   {
@@ -884,7 +789,6 @@ static bool subscriptionMatchCallback
       aP->name = (char*) alias;  // Death to C++ !!!
   }
 
-  treePresent("SUB", "attrsForNotification In subscriptionMatchCallback after alias lookup", niP->attrsForNotification);
   //
   // Lastly, we must add Entity ID to the tree.
   // This tree will end up being an item in the Notification::data array,
@@ -893,8 +797,6 @@ static bool subscriptionMatchCallback
   KjNode* entityIdNodeP = kjString(orionldState.kjsonP, "id",   entityId);
 
   kjChildAdd(niP->attrsForNotification, entityIdNodeP);
-
-  treePresent("MERGE", "attrsForNotification: End of subscriptionMatchCallback", niP->attrsForNotification);
 
   return true;
 }
@@ -940,8 +842,6 @@ bool orionldPostEntityOverwrite(ConnectionInfo* ciP)
   // we will need to clone the tree, so that we don't destroy the cache when changing '.' for '='
   //
   KjNode* requestTree = orionldState.requestTree;  // kjClone(&orionldState.kalloc, orionldState.requestTree) ?
-
-  treePresent("MERGE", "the payload", requestTree);
 
   // Expand attribute names
   if (expandAttrNames(requestTree, &details) == false)
@@ -989,8 +889,6 @@ bool orionldPostEntityOverwrite(ConnectionInfo* ciP)
 
 
   // Merge requestTree with currentEntityTree
-  entityTreePresent("MERGE", "What's in the Database", currentEntityTree);
-  entityTreePresent("MERGE", "What's in the Payload", requestTree);
   if (kjTreeMergeAddNewAttrsOverwriteExisting(currentEntityTree, requestTree, &title, &details) == false)
   {
     ciP->httpStatusCode = SccReceiverInternalError;
@@ -1006,8 +904,6 @@ bool orionldPostEntityOverwrite(ConnectionInfo* ciP)
 
     return false;
   }
-
-  entityTreePresent("MERGE", "After merge", currentEntityTree);
 
   //
   // Set the modification date of the entity

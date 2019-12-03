@@ -666,7 +666,6 @@ int orionldMhdConnectionTreat(ConnectionInfo* ciP)
   bool     serviceRoutineResult = false;
 
   LM_T(LmtMhd, ("Read all the payload - treating the request!"));
-  LM_TMP(("----------------------- Treating NGSI-LD request %03d: %s %s: %s --------------------------", requestNo, orionldState.verbString, orionldState.urlPath, ciP->payload));
 
   //
   // 01. Predetected Error?
