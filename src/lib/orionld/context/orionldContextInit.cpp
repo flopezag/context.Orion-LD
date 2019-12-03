@@ -192,12 +192,8 @@ static void contextFileTreat(char* dir, struct dirent* dirItemP)
   else
   {
     if (contextP == NULL)
-      LM_E(("CTX: error creating context from file system file '%s'", path));
-    else
-    {
-      LM_TMP(("CTX: Calling orionldContextCacheInsert for %s", contextP->url));
+      LM_E(("error creating context from file system file '%s'", path));
       orionldContextCacheInsert(contextP);
-    }
   }
 }
 
@@ -246,7 +242,6 @@ static bool fileSystemContexts(char* cacheContextDir)
 //
 bool orionldContextInit(OrionldProblemDetails* pdP)
 {
-  LM_TMP(("CTX: Initializing ALT Context list"));
   orionldContextCacheInit();
 
   bool  gotCoreContext  = false;
@@ -255,7 +250,6 @@ bool orionldContextInit(OrionldProblemDetails* pdP)
   char* cacheContextDir = getenv("ORIONLD_CACHED_CONTEXT_DIRECTORY");
   if (cacheContextDir != NULL)
   {
-    LM_TMP(("CTX: Getting initial contexts from '%s'", cacheContextDir));
     gotCoreContext = fileSystemContexts(cacheContextDir);
     if (gotCoreContext == false)
       LM_E(("Unable to cache pre-loaded contexts from '%s'", cacheContextDir));
@@ -265,22 +259,18 @@ bool orionldContextInit(OrionldProblemDetails* pdP)
 
   if (gotCoreContext == false)
   {
-    LM_TMP(("CTX: Downloading and processing Core Context"));
     orionldCoreContextP = orionldContextFromUrl(ORIONLD_CORE_CONTEXT_URL, pdP);
 
     if (orionldCoreContextP == NULL)
-    {
-      LM_TMP(("CTX: orionldContextCreateFromUrl: %s %s", pdP->title, pdP->detail));
       return false;
-    }
   }
 
   OrionldContextItem* vocabP = orionldContextItemLookup(orionldCoreContextP, "@vocab", NULL);
 
   if (vocabP == NULL)
   {
-    LM_E(("CTX: Context Error (no @vocab item found in Core Context)"));
-    orionldDefaultUrl    = (char*) "https://example.org/ngsi-ld/default/";
+    LM_E(("Context Error (no @vocab item found in Core Context)"));
+    orionldDefaultUrl = (char*) "https://example.org/ngsi-ld/default/";
   }
   else
     orionldDefaultUrl = vocabP->id;

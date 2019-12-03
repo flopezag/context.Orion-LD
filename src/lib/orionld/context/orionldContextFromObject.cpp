@@ -105,12 +105,9 @@ OrionldContext* orionldContextFromObject(char* url, bool toBeCloned, KjNode* con
   char*           id = NULL;
   OrionldContext* contextP;
 
-  LM_TMP(("CTX: Creating hash tables for context '%s'", url));
-
   if (url == NULL)
     url  = orionldContextUrlGenerate(&id);
 
-  LM_TMP(("CTX: Calling orionldContextCreate. url: '%s' (at %p)", url, url));
   contextP = orionldContextCreate(url, id, contextObjectP, true, toBeCloned);
   orionldContextCacheInsert(contextP);
 

@@ -40,7 +40,6 @@
 //
 OrionldContext* orionldContextCacheLookup(const char* url)
 {
-  LM_TMP(("CTX: Looking up context '%s'", url));
   orionldContextCachePresent("CTX", "orionldContextCacheLookup");
   for (int ix = 0; ix < orionldContextCacheSlotIx; ix++)
   {
@@ -51,6 +50,5 @@ OrionldContext* orionldContextCacheLookup(const char* url)
       return orionldContextCache[ix];
   }
 
-  LM_TMP(("CTX: did not find context '%s'", url));
   return NULL;
 }
