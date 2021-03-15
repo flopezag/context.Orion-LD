@@ -6,6 +6,7 @@
 [![Docker badge](https://img.shields.io/docker/pulls/fiware/orion-ld.svg)](https://hub.docker.com/r/fiware/orion-ld/)
 [![Support badge]( https://img.shields.io/badge/support-sof-yellowgreen.svg)](http://stackoverflow.com/questions/tagged/fiware-orion)
 [![NGSI-LD badge](https://img.shields.io/badge/NGSI-LD-red.svg)](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.02.01_60/gs_CIM009v010201p.pdf)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fflopezag%2Fcontext.Orion-LD.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fflopezag%2Fcontext.Orion-LD?ref=badge_shield)
 <br>
 [![Documentation badge](https://readthedocs.org/projects/fiware-orion/badge/?version=latest)](http://fiware-orion-ld.readthedocs.io/en/latest/?badge=latest)
 ![Status](https://nexus.lab.fiware.org/static/badges/statuses/incubating.svg)
@@ -53,3 +54,7 @@ Documentation:
 
 A Test Suite for NGSI-LD can be found [here](https://github.com/fiware/NGSI-LD_Tests). 
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fflopezag%2Fcontext.Orion-LD.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fflopezag%2Fcontext.Orion-LD?ref=badge_large)
